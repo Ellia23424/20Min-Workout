@@ -32,18 +32,18 @@
     .btn-opt.active { background: var(--accent); color: #0f172a; border-color: var(--accent); }
 
     /* Timer Screen */
-    .timer-display { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; }
-    .phase-tag { font-weight: 800; font-size: 1.1rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 16px; border-radius: 20px; margin-bottom: 8px; }
+    .timer-display { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 0 8px 0; }
+    .phase-tag { font-weight: 800; font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 16px; border-radius: 20px; margin-bottom: 4px; }
     .phase-tag.warmup { background: rgba(245, 158, 11, 0.2); color: var(--warmup); }
     .phase-tag.work { background: rgba(34, 197, 94, 0.2); color: var(--work); }
     .phase-tag.rest { background: rgba(239, 68, 68, 0.2); color: var(--rest); }
     
-    .time-large { font-size: 4rem; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; margin: 8px 0; }
-    .exercise-title { font-size: 1.4rem; font-weight: 700; color: #fff; margin-top: 4px; }
+    .time-large { font-size: 3.5rem; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; margin: 4px 0; }
+    .exercise-title { font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 2px; }
 
-    /* Visual Demo Area */
-    .demo-container { width: 100%; height: 160px; background: #0f172a; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #334155; position: relative; }
-    .demo-svg { width: 100px; height: 100px; }
+    /* Real Demonstration GIF Container */
+    .demo-container { width: 100%; height: 210px; background: #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #334155; position: relative; }
+    .demo-gif { width: 100%; height: 100%; object-fit: cover; }
 
     /* Safety & Guidance */
     .safety-box { background: rgba(56, 189, 248, 0.1); border-left: 4px solid var(--accent); padding: 10px; border-radius: 0 8px 8px 0; font-size: 0.85rem; line-height: 1.4; color: #cbd5e1; }
@@ -86,7 +86,7 @@
 
     <div class="card-title" style="margin-top: 8px;">Includes Adaptive Warmup</div>
     <p style="font-size: 0.85rem; color: var(--text-muted);">
-      ⚡ Automatically adds a <strong>2-minute targeted dynamic warmup</strong> before your 20-minute session begins.
+      ⚡ Automatically starts with a <strong>2-minute targeted dynamic warmup</strong> with real demonstration videos before your main workout.
     </p>
 
     <button class="btn-main btn-primary" onclick="startSession()" style="margin-top: 8px;">START WORKOUT</button>
@@ -96,16 +96,14 @@
   <div id="timer-view" class="card hidden">
     <div class="timer-display">
       <div id="phase-tag" class="phase-tag warmup">WARMUP</div>
-      <div id="exercise-name" class="exercise-title">Arm Circles</div>
+      <div id="exercise-name" class="exercise-title">Jumping Jacks</div>
       <div id="time-display" class="time-large">02:00</div>
       <div id="total-time" style="font-size: 0.85rem; color: var(--text-muted);">Total Left: 22:00</div>
     </div>
 
-    <!-- Animated SVG Visual Guide -->
+    <!-- Real Human Exercise Demonstration GIF -->
     <div class="demo-container">
-      <svg id="exercise-svg" class="demo-svg" viewBox="0 0 100 100">
-        <!-- Dynamic SVG content loaded via JS -->
-      </svg>
+      <img id="exercise-gif" class="demo-gif" src="" alt="Real Exercise Demo">
     </div>
 
     <!-- Safety & Form Tips -->
@@ -128,61 +126,41 @@
   </div>
 
   <script>
-    // --- WORKOUT & EXERCISE DATA ---
+    // --- REAL HUMAN DEMO GIF DATA ---
     const warmups = {
       full: [
-        { name: "Jumping Jacks", duration: 60, tip: "Land softly on the balls of your feet to protect knees.", svg: "jack" },
-        { name: "Arm Swings & Leg Swings", duration: 60, tip: "Keep movements fluid, don't force past tension.", svg: "swing" }
+        { name: "Jumping Jacks", duration: 60, tip: "Land softly on the balls of your feet to cushion impact on knees.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc29lNmNpdmsxbGdyMmdhcnAwdzcycnh5eTJ1cmpsdWFvdXJibnVlNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKMt1VVNkHV2PaE/giphy.gif" },
+        { name: "Arm Swings & Leg Swings", duration: 60, tip: "Keep movements fluid and controlled. Do not force joint range.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZhcDZxeHV1dmNhNndzODVrc25hcmMzdjIybXZxbmkybjQ0aXRvaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3vR8IAt8J3fmg34s/giphy.gif" }
       ],
       upper: [
-        { name: "Arm Circles & Hugs", duration: 60, tip: "Start small, expand to wider circular motions gradually.", svg: "swing" },
-        { name: "Scapular Wall Slides", duration: 60, tip: "Press lower back and elbows gently against wall.", svg: "push" }
+        { name: "Arm Circles & Hugs", duration: 60, tip: "Start small, expanding into wider circular motions gradually.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZhcDZxeHV1dmNhNndzODVrc25hcmMzdjIybXZxbmkybjQ0aXRvaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3vR8IAt8J3fmg34s/giphy.gif" },
+        { name: "Shoulder Rolls & Taps", duration: 60, tip: "Keep shoulder blades pulled down away from ears.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWNvZmdvaGhybmR6bmZ3dmQxdm05amJmN2JjcnpoZTh6aHptdW5qYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT8qAY3U9Aij4b6Axy/giphy.gif" }
       ],
       lower: [
-        { name: "Hip Openers / Gate Openers", duration: 60, tip: "Lift knee high before rotating outward.", svg: "squat" },
-        { name: "Bodyweight Air Squats", duration: 60, tip: "Keep chest up and knees tracking over toes.", svg: "squat" }
+        { name: "Hip Openers & High Knees", duration: 60, tip: "Lift knee high before rotating outward to open hip joints.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExczhkcm5mMDVsbnk5azl3ZXdtMWRwdzN2cmkxbzZqand6NnVsMWxldyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKxOzNhE6U8a8da/giphy.gif" },
+        { name: "Bodyweight Air Squats", duration: 60, tip: "Keep chest upright and knees tracking directly over toes.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDVqMDlyZWh2aDFmNWN1c3d0NGs2a2M2bmVreHZmdGludjFwcGRkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT8qB308Co3iA35fUI/giphy.gif" }
       ]
     };
 
     const mainExercises = {
       full: [
-        { name: "Push-ups", tip: "Keep core tight like a plank. Do not let lower back sag.", svg: "push" },
-        { name: "Bodyweight Squats", tip: "Drive back with hips first, keep heels flat on floor.", svg: "squat" },
-        { name: "Mountain Climbers", tip: "Drive knees toward chest without lifting hips high.", svg: "climb" },
-        { name: "Reverse Lunges", tip: "Keep front knee at 90 degrees directly above ankle.", svg: "lunge" }
+        { name: "Standard Push-ups", tip: "Keep core tight like a plank. Do not let lower back sag.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2s5MmptcTJnaGN3ODlqaGNia2VpZ25vNDhmd2pvcWR3czFvdWszbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKSxCllT5OmsI48/giphy.gif" },
+        { name: "Bodyweight Squats", tip: "Drive back with hips first, keeping heels firmly flat on floor.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDVqMDlyZWh2aDFmNWN1c3d0NGs2a2M2bmVreHZmdGludjFwcGRkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT8qB308Co3iA35fUI/giphy.gif" },
+        { name: "Mountain Climbers", tip: "Drive knees toward chest rapidly without raising hips high.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWxweXFvdHRucnZycGlmdGFiMWlybDJjZzdwbXNhcnAxdW5zOHE4eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l1J9FiGxR61OcF2mI/giphy.gif" },
+        { name: "Reverse Lunges", tip: "Step backward and lower back knee gently, keeping front knee at 90°.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaG96MDFiaXZpYmg4YTRmNDlneTFidTFxc2o1c2JocDlnZmg3dWgyOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKB1TstM7m9eO08/giphy.gif" }
       ],
       upper: [
-        { name: "Standard Push-ups", tip: "Elbows angled back at 45 degrees, not flared out.", svg: "push" },
-        { name: "Chair / Couch Dips", tip: "Keep back close to seat edge to protect shoulders.", svg: "dip" },
-        { name: "Pike Push-ups", tip: "Hips up in pike position, target shoulder control.", svg: "push" },
-        { name: "Plank Shoulder Taps", tip: "Minimize hip swaying while tapping opposite shoulder.", svg: "climb" }
+        { name: "Standard Push-ups", tip: "Keep elbows angled back at 45 degrees, avoid flaring out shoulder joints.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2s5MmptcTJnaGN3ODlqaGNia2VpZ25vNDhmd2pvcWR3czFvdWszbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKSxCllT5OmsI48/giphy.gif" },
+        { name: "Chair / Couch Dips", tip: "Keep back close to seat edge to protect shoulders from over-stretching.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDM5dGptZjZ2MHBhNHU3bmU3bm0wbjdpY2pxazVsMnFnYjgyNDQzNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT8qB1sM3Q9F5eH6NO/giphy.gif" },
+        { name: "Plank Shoulder Taps", tip: "Keep feet shoulder-width apart to prevent hips from swaying.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWl0MDFsaHcxMWg4a2FicHk0MWg3OGs4eGpmMXdpeWRxNmJnaHNwaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT8qBnM4EOfZfG70fS/giphy.gif" },
+        { name: "Pike / Elevated Push-ups", tip: "Target upper chest and shoulders while keeping core engaged.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2s5MmptcTJnaGN3ODlqaGNia2VpZ25vNDhmd2pvcWR3czFvdWszbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKSxCllT5OmsI48/giphy.gif" }
       ],
       lower: [
-        { name: "Air Squats", tip: "Inhale down, exhale driving through heels to top.", svg: "squat" },
-        { name: "Alternating Lunges", tip: "Step firmly, lightly touch back knee to floor.", svg: "lunge" },
-        { name: "Glute Bridges", tip: "Squeeze glutes at the top for 1 second without arching lower back.", svg: "bridge" },
-        { name: "Wall Sit", tip: "Thighs parallel to floor, press lower back into wall.", svg: "squat" }
+        { name: "Air Squats", tip: "Inhale lowering down, exhale driving firmly through heels to top.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDVqMDlyZWh2aDFmNWN1c3d0NGs2a2M2bmVreHZmdGludjFwcGRkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT8qB308Co3iA35fUI/giphy.gif" },
+        { name: "Alternating Lunges", tip: "Step firmly forward, gently hovering back knee above floor.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaG96MDFiaXZpYmg4YTRmNDlneTFidTFxc2o1c2JocDlnZmg3dWgyOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKB1TstM7m9eO08/giphy.gif" },
+        { name: "Glute Bridges", tip: "Squeeze glutes at top for 1 second without arching lower back.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWY1NnlsNmR1OXdyc2g3NXY1ZWdqZnlsZDJycmQxaXB1cjNrbTZveSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKx23Lw24n4F7O0/giphy.gif" },
+        { name: "High Knee Run", tip: "Maintain crisp posture while driving knees up to hip height.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExczhkcm5mMDVsbnk5azl3ZXdtMWRwdzN2cmkxbzZqand6NnVsMWxldyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKxOzNhE6U8a8da/giphy.gif" }
       ]
-    };
-
-    // --- SVG ANIMATION ENGINE ---
-    const svgGraphic = {
-      push: `<circle cx="50" cy="30" r="12" fill="#38bdf8"/>
-             <line x1="50" y1="42" x2="50" y2="70" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
-             <line x1="50" y1="50" x2="25" y2="75" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
-             <line x1="50" y1="50" x2="75" y2="75" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>`,
-      squat: `<circle cx="50" cy="25" r="12" fill="#22c55e"/>
-              <line x1="50" y1="37" x2="50" y2="60" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
-              <line x1="50" y1="60" x2="30" y2="85" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
-              <line x1="50" y1="60" x2="70" y2="85" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>`,
-      swing: `<circle cx="50" cy="25" r="12" fill="#f59e0b"/>
-              <line x1="50" y1="37" x2="50" y2="65" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
-              <line x1="50" y1="45" x2="20" y2="45" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
-              <line x1="50" y1="45" x2="80" y2="45" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>`,
-      lunge: `<circle cx="45" cy="25" r="12" fill="#38bdf8"/>
-              <line x1="45" y1="37" x2="45" y2="65" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
-              <line x1="45" y1="65" x2="25" y2="85" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
-              <line x1="45" y1="65" x2="70" y2="75" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>`
     };
 
     // --- APP STATE ---
@@ -190,13 +168,13 @@
     let style = 'tabata';
     let timer = null;
     let isPaused = false;
-    let currentPhase = 'warmup'; // warmup, work, rest
+    let currentPhase = 'warmup'; 
     let warmupIndex = 0;
     let exerciseIndex = 0;
-    let secondsLeft = 120; // 2 min warmup
-    let totalWorkoutSeconds = 1200; // 20 min main
+    let secondsLeft = 60;
+    let totalWorkoutSeconds = 1200;
 
-    // --- WEB AUDIO SOUND SYNTHESIZER ---
+    // --- SOUND SYNTHESIZER ---
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playBeep(freq = 600, duration = 0.15) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -249,11 +227,11 @@
       }
 
       if (secondsLeft <= 3 && secondsLeft > 0) {
-        playBeep(440, 0.1); // Countdown beep
+        playBeep(440, 0.1);
       }
 
       if (secondsLeft <= 0) {
-        playBeep(880, 0.3); // Phase switch tone
+        playBeep(880, 0.3);
         nextPhase();
       }
 
@@ -270,7 +248,6 @@
         if (warmupIndex < warmups[focus].length) {
           secondsLeft = warmups[focus][warmupIndex].duration;
         } else {
-          // Warmup complete -> start main workout
           currentPhase = 'work';
           exerciseIndex = 0;
           secondsLeft = (style === 'tabata') ? 40 : 60;
@@ -291,7 +268,7 @@
       const timeDisp = document.getElementById('time-display');
       const totalDisp = document.getElementById('total-time');
       const safetyTip = document.getElementById('safety-tip');
-      const svgBox = document.getElementById('exercise-svg');
+      const gifImg = document.getElementById('exercise-gif');
 
       tag.className = 'phase-tag ' + currentPhase;
       tag.textContent = currentPhase.toUpperCase();
@@ -301,14 +278,16 @@
         currentEx = warmups[focus][warmupIndex];
       } else if (currentPhase === 'rest') {
         const nextEx = mainExercises[focus][(exerciseIndex + 1) % mainExercises[focus].length];
-        currentEx = { name: `REST (Next: ${nextEx.name})`, tip: "Catch your breath and sip water.", svg: "swing" };
+        currentEx = { name: `REST (Next: ${nextEx.name})`, tip: "Catch your breath and hydrate.", gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZhcDZxeHV1dmNhNndzODVrc25hcmMzdjIybXZxbmkybjQ0aXRvaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3vR8IAt8J3fmg34s/giphy.gif" };
       } else {
         currentEx = mainExercises[focus][exerciseIndex];
       }
 
       exName.textContent = currentEx.name;
       safetyTip.textContent = currentEx.tip;
-      svgBox.innerHTML = svgGraphic[currentEx.svg] || svgGraphic.push;
+      if (gifImg.src !== currentEx.gif) {
+        gifImg.src = currentEx.gif;
+      }
 
       const mins = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
       const secs = (secondsLeft % 60).toString().padStart(2, '0');
@@ -335,7 +314,6 @@
       playBeep(1000, 0.5);
       alert("🎉 Great job! You completed your 20-minute workout!");
       
-      // Update streak
       let streak = parseInt(localStorage.getItem('fit20_streak') || '0') + 1;
       localStorage.setItem('fit20_streak', streak.toString());
       document.getElementById('streak-count').textContent = streak;
@@ -343,16 +321,14 @@
       stopSession();
     }
 
-    // --- REMINDER SETTING ---
     function saveReminder() {
       const val = document.getElementById('reminder-time').value;
       localStorage.setItem('fit20_reminder', val);
-      if (Notification && Notification.permission !== 'granted') {
+      if (window.Notification && Notification.permission !== 'granted') {
         Notification.requestPermission();
       }
     }
 
-    // Load saved streak on startup
     document.getElementById('streak-count').textContent = localStorage.getItem('fit20_streak') || '0';
   </script>
 </body>
